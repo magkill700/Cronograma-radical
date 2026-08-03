@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cronômetro Intervalado Sênior</title>
+  
+  <!-- Manifest embutido diretamente para validação automática no PWABuilder -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="Aplicativo de cronômetro intervalado com avisos sonoros e de voz.">
+
   <style>
     :root {
       --bg: #0f172a;
@@ -187,7 +193,7 @@
     // Audio & Speech Synthesis
     function speak(text) {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Limpa falas pendentes
+        window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'pt-BR';
         utterance.rate = 1.1;
@@ -201,14 +207,14 @@
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Nota A5
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.2);
       } catch (e) {
-        // Fallback silencioso caso áudio seja bloqueado
+        // Fallback
       }
     }
 
@@ -235,7 +241,6 @@
         timeRemaining--;
         updateUI();
       } else {
-        // Transição de Fase
         if (phase === 'work') {
           phase = 'rest';
           timeRemaining = REST_TIME;
